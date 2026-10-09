@@ -1,5 +1,6 @@
 package org.example.financemanagement.expense;
 
+import org.example.financemanagement.category.CategoryType;
 import org.example.financemanagement.common.exception.UserNotFoundException;
 import org.example.financemanagement.expense.dto.CreateExpenseRequest;
 import org.example.financemanagement.expense.dto.ExpenseDTOMapper;
@@ -8,6 +9,7 @@ import org.example.financemanagement.user.User;
 import org.example.financemanagement.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,4 +54,28 @@ public class ExpenseService {
     }
 
 
+    public ExpenseResponse createVoiceExpense(
+            Long userId,
+            CategoryType categoryType,
+            BigDecimal amount,
+            String description
+    ) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User not found")
+                );
+
+        Expense expense = new Expense(
+                user,
+                categoryType,
+                amount,
+                description
+        );
+
+        expense.setInputMethod(InputMethod.VOICE);
+        Expense savedExpense = expenseRepository.save(expense);
+
+        return expenseDTOMapper.apply(savedExpense);
+    }
 }

@@ -41,7 +41,9 @@ public class ReportService {
             int year,
             int month
     ) {
-
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("User not found");
+        }
         LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
         LocalDateTime end = start.plusMonths(1);
 
