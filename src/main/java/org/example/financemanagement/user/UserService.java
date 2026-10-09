@@ -1,9 +1,11 @@
 package org.example.financemanagement.user;
 
+import org.example.financemanagement.common.exception.UserNotFoundException;
 import org.example.financemanagement.user.dto.CreateUserRequest;
 import org.example.financemanagement.user.dto.UpdateUserRequest;
 import org.example.financemanagement.user.dto.UserDTOMapper;
 import org.example.financemanagement.user.dto.UserResponse;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,10 +15,12 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final UserDTOMapper userDTOMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserDTOMapper userDTOMapper) {
+    public UserService(UserRepository userRepository, UserDTOMapper userDTOMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userDTOMapper = userDTOMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponse createUser(CreateUserRequest request) {
@@ -26,7 +30,7 @@ public class UserService {
         User user = new User(
                 request.getName(),
                 request.getEmail(),
-                request.getPassword()
+                passwordEncoder.encode(request.getPassword())
         );
         User savedUser =userRepository.save(user);
         return userDTOMapper.apply(savedUser);
@@ -43,7 +47,7 @@ public class UserService {
 
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("User not found"));
+                () -> new UserNotFoundException("User not found"));
         return userDTOMapper.apply(user);
     }
 
@@ -53,7 +57,9 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        user.setPassword(
+                passwordEncoder.encode(request.getPassword())
+        );
 
         User savedUser = userRepository.save(user);
 
