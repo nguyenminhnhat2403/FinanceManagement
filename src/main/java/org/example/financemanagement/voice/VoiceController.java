@@ -7,6 +7,8 @@ import org.example.financemanagement.expense.dto.ExpenseResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/users")
 public class VoiceController {
@@ -29,10 +31,9 @@ public class VoiceController {
     public ExpenseResponse createVoiceExpense(
             @PathVariable Long userId,
             @RequestParam("file") MultipartFile file
-    ) {
+    ) throws IOException {
 
         String text = voiceService.convertSpeechToText(file);
-
         ExpenseParseResult result = aiService.parseExpense(text);
 
         return expenseService.createVoiceExpense(
@@ -41,5 +42,13 @@ public class VoiceController {
                 result.getAmount(),
                 result.getDescription()
         );
+    }
+
+    @PostMapping("/voice/transcribe")
+    public String transcribe(
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+
+        return voiceService.convertSpeechToText(file);
     }
 }
