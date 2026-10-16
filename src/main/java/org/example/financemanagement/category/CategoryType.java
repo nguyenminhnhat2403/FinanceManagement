@@ -8,6 +8,5 @@ public enum CategoryType {
     EDUCATION,
     HOUSING,
     HEALTH,
-    SALARY,
     OTHER
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Positive;
 import org.example.financemanagement.category.CategoryType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class CreateExpenseRequest {
 
@@ -19,6 +20,7 @@ public class CreateExpenseRequest {
     @NotBlank
     @NotNull
     private String description;
+    private LocalDateTime expenseDate;
 
     public CategoryType getCategoryType() {
         return categoryType;
@@ -43,4 +45,8 @@ public class CreateExpenseRequest {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public LocalDateTime getExpenseDate() {return expenseDate;}
+
+    public void setExpenseDate(LocalDateTime expenseDate) {this.expenseDate = expenseDate;}
 }

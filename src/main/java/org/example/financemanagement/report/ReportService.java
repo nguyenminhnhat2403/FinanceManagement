@@ -3,8 +3,11 @@ package org.example.financemanagement.report;
 import org.example.financemanagement.common.exception.UserNotFoundException;
 import org.example.financemanagement.expense.Expense;
 import org.example.financemanagement.expense.ExpenseRepository;
+import org.example.financemanagement.security.UserAccessService;
 import org.example.financemanagement.user.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,19 +18,22 @@ public class ReportService {
 
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
-
+    private final UserAccessService userAccessService;
     public ReportService(
             ExpenseRepository expenseRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            UserAccessService userAccessService
     ) {
         this.expenseRepository = expenseRepository;
         this.userRepository = userRepository;
+        this.userAccessService = userAccessService;
     }
 
     public BigDecimal getTotalExpense(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException("User not found");
         }
+        userAccessService.checkOwner(userId);
         List<Expense> expenses = expenseRepository.findByUserId(userId);
         BigDecimal total = BigDecimal.ZERO;
 
@@ -41,20 +47,41 @@ public class ReportService {
             int year,
             int month
     ) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("User not found");
+        // Kiểm tra user đang đăng nhập có được xem dữ liệu này không
+        userAccessService.checkOwner(userId);
+
+        if (year < 1 || year > 9999) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Năm phải nằm trong khoảng từ 1 đến 9999"
+            );
         }
-        LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
+
+        if (month < 1 || month > 12) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Tháng phải nằm trong khoảng từ 1 đến 12"
+            );
+        }
+
+        LocalDateTime start = LocalDateTime.of(
+                year, month, 1, 0, 0
+        );
+
         LocalDateTime end = start.plusMonths(1);
 
-        List<Expense> expenses = expenseRepository.findByUserIdAndExpenseDateBetween(
-                                userId,
-                                start,
-                                end
-                        );
+        List<Expense> expenses =
+                expenseRepository.findExpensesInPeriod(
+                        userId,
+                        start,
+                        end
+                );
 
         BigDecimal total = BigDecimal.ZERO;
-        for (Expense expense : expenses) total = total.add(expense.getAmount());
+
+        for (Expense expense : expenses) {
+            total = total.add(expense.getAmount());
+        }
 
         return total;
     }

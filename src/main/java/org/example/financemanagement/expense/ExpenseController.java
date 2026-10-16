@@ -5,6 +5,7 @@ import org.example.financemanagement.expense.dto.CreateExpenseRequest;
 import org.example.financemanagement.expense.dto.ExpenseResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -25,8 +26,19 @@ public class ExpenseController {
         return expenseService.createExpense(userId, request);
     }
 
-    @GetMapping ("/{userId}/expenses")
-    public List<ExpenseResponse> getAllExpense(@PathVariable Long userId){
-        return expenseService.getAllExpense(userId);
+    @GetMapping("/{userId}/expenses")
+    public List<ExpenseResponse> getExpensesByMonth(
+            @PathVariable Long userId,
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        return expenseService.getExpensesByMonth(
+                userId,
+                year,
+                month
+        );
     }
+
+
+
 }

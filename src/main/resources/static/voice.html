@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nhập khoản chi bằng giọng nói</title>
+</head>
+
+<body>
+<h1>Nhập bằng giọng nói</h1>
+
+<p>Bấm micro rồi nói, ví dụ: “Ăn trưa 50 nghìn”.</p>
+
+<button id="startButton" type="button">🎤 Bắt đầu</button>
+<button id="stopButton" type="button" disabled>Dừng</button>
+
+<p id="status" role="status">Chưa bật micro.</p>
+
+<label for="expenseText">Văn bản nhận được:</label>
+<br>
+
+<textarea
+        id="expenseText"
+        rows="5"
+        cols="45"
+        placeholder="Bạn có thể nói hoặc nhập bằng bàn phím."
+></textarea>
+
+<script>
+    // Lấy các phần tử trên giao diện
+    const startButton = document.getElementById("startButton");
+    const stopButton = document.getElementById("stopButton");
+    const status = document.getElementById("status");
+    const expenseText = document.getElementById("expenseText");
+
+    // Kiểm tra trình duyệt có hỗ trợ nhận giọng nói không
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        startButton.disabled = true;
+        status.textContent =
+            "Trình duyệt chưa hỗ trợ. Bạn vẫn có thể nhập bằng bàn phím.";
+    } else {
+        // Tạo đối tượng nhận giọng nói
+        const recognition = new SpeechRecognition();
+
+        recognition.lang = "vi-VN";
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        let hasResult = false;
+        let hasError = false;
+
+        // Khi người dùng bấm Bắt đầu
+        startButton.onclick = () => {
+            hasResult = false;
+            hasError = false;
+
+            startButton.disabled = true;
+            status.textContent = "Đang bật micro...";
+
+            try {
+                recognition.start();
+            } catch (error) {
+                startButton.disabled = false;
+                status.textContent = "Không thể bắt đầu nhận giọng nói.";
+            }
+        };
+
+        // Khi micro bắt đầu nghe
+        recognition.onstart = () => {
+            stopButton.disabled = false;
+            status.textContent = "Đang nghe, bạn hãy nói...";
+        };
+
+        // Khi nhận được văn bản
+        recognition.onresult = (event) => {
+            const text = event.results[0][0].transcript;
+
+            expenseText.value = text;
+            hasResult = true;
+            status.textContent = "Đã chuyển thành văn bản.";
+        };
+
+        // Khi người dùng bấm Dừng
+        stopButton.onclick = () => {
+            recognition.stop();
+            stopButton.disabled = true;
+        };
+
+        // Khi xảy ra lỗi
+        recognition.onerror = (event) => {
+            hasError = true;
+
+            const messages = {
+                "not-allowed": "Bạn cần cho phép trình duyệt dùng micro.",
+                "audio-capture": "Không tìm thấy micro hoặc micro không dùng được.",
+                "no-speech": "Chưa nghe được giọng nói. Bạn hãy thử lại.",
+                "network": "Lỗi kết nối dịch vụ nhận giọng nói."
+            };
+
+            status.textContent =
+                messages[event.error] || "Lỗi nhận giọng nói: " + event.error;
+        };
+
+        // Khi phiên nghe kết thúc
+        recognition.onend = () => {
+            startButton.disabled = false;
+            stopButton.disabled = true;
+
+            if (!hasResult && !hasError) {
+                status.textContent = "Chưa nhận được văn bản. Bạn hãy thử lại.";
+            }
+        };
+    }
+</script>
+</body>
+</html>
