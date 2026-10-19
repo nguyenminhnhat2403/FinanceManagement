@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký | FinanceManagement</title>
+    <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/auth-extra.css">
+    <script defer src="/assets/js/auth-flow.js"></script>
+</head>
+<body class="email-auth" data-mode="register">
+<main class="auth-layout">
+    <section class="brand-panel">
+        <div class="brand-top"><span class="brand-logo">FM</span> FinanceManagement</div>
+        <div class="brand-content">
+            <div class="eyebrow">BẮT ĐẦU TỪ HÔM NAY</div>
+            <h1>Quản lý chi tiêu.<br>Chủ động tương lai.</h1>
+            <p class="brand-description">Tạo tài khoản để ghi lại khoản chi và theo dõi tài chính cá nhân.</p>
+        </div>
+        <p class="brand-bottom">FinanceManagement · Chi tiêu thông minh hơn.</p>
+    </section>
+
+    <section class="form-panel">
+        <div class="form-wrap">
+            <div class="form-heading">
+                <span class="welcome-badge">TÀI KHOẢN MỚI</span>
+                <h2>Đăng ký tài khoản</h2>
+                <p>Gửi mã đến Gmail, sau đó nhập mã để hoàn tất đăng ký.</p>
+            </div>
+
+            <form id="authForm">
+                <fieldset id="authFields">
+                    <div class="form-field">
+                        <label for="name">Họ tên</label>
+                        <div class="input-wrap">
+                            <input id="name" autocomplete="name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="email">Địa chỉ Gmail</label>
+                        <div class="input-wrap">
+                            <input id="email" type="email" autocomplete="email"
+                                   placeholder="ban@gmail.com" required>
+                        </div>
+                    </div>
+
+                    <button id="sendCodeButton" class="secondary-button" type="button">Gửi mã xác nhận</button>
+
+                    <div class="form-field">
+                        <label for="code">Mã xác nhận trong Gmail</label>
+                        <div class="input-wrap">
+                            <input id="code" inputmode="numeric" pattern="[0-9]{6}"
+                                   maxlength="6" autocomplete="one-time-code"
+                                   placeholder="6 chữ số" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="password">Mật khẩu của app</label>
+                        <div class="input-wrap">
+                            <input id="password" type="password" minlength="6"
+                                   autocomplete="new-password" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="confirmPassword">Nhập lại mật khẩu</label>
+                        <div class="input-wrap">
+                            <input id="confirmPassword" type="password" minlength="6"
+                                   autocomplete="new-password" required>
+                        </div>
+                    </div>
+
+                    <button id="submitButton" class="primary-button" type="submit">Xác nhận và tạo tài khoản</button>
+                </fieldset>
+
+                <p id="authMessage" class="form-message" role="status" aria-live="polite" hidden></p>
+            </form>
+
+            <p class="signup-note">Đã có tài khoản? <a href="/login.html">Đăng nhập</a></p>
+        </div>
+    </section>
+</main>
+</body>
+</html>
+

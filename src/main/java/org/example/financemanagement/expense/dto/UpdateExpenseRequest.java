@@ -1,10 +1,12 @@
 package org.example.financemanagement.expense.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.example.financemanagement.category.CategoryType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class UpdateExpenseRequest {
 
@@ -15,32 +17,41 @@ public class UpdateExpenseRequest {
     @Positive
     private BigDecimal amount;
 
+    @NotBlank
     private String description;
 
-    public UpdateExpenseRequest() {
-    }
+    @NotNull
+    private LocalDateTime expenseDate;
 
     public CategoryType getCategoryType() {
         return categoryType;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setCategoryType(CategoryType categoryType) {
         this.categoryType = categoryType;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getExpenseDate() {
+        return expenseDate;
+    }
+
+    public void setExpenseDate(LocalDateTime expenseDate) {
+        this.expenseDate = expenseDate;
     }
 }

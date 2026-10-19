@@ -20,6 +20,7 @@ public class CreateExpenseRequest {
     @NotBlank
     @NotNull
     private String description;
+
     private LocalDateTime expenseDate;
 
     public CategoryType getCategoryType() {

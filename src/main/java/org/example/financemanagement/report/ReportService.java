@@ -30,16 +30,13 @@ public class ReportService {
     }
 
     public BigDecimal getTotalExpense(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("User not found");
-        }
         userAccessService.checkOwner(userId);
-        List<Expense> expenses = expenseRepository.findByUserId(userId);
-        BigDecimal total = BigDecimal.ZERO;
 
-        for (Expense expense : expenses) total = total.add(expense.getAmount());
+        BigDecimal total =
+                expenseRepository.sumAmountByUserId(userId);
 
-        return total;
+        // SUM trả null khi không có khoản chi phù hợp
+        return total != null ? total : BigDecimal.ZERO;
     }
 
     public BigDecimal getMonthlyExpense(

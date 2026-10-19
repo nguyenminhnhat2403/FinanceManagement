@@ -11,11 +11,11 @@ MVP tập trung vào dashboard, danh sách chi tiêu và hai biểu đồ. Nhậ
 Hành trình người dùng:
 
 1. Đăng ký, đăng nhập.
-2. Thêm khoản chi gồm số tiền, danh mục, mô tả và ngày chi.
-3. Chọn tháng để xem danh sách và tổng chi tiêu.
-4. Xem biểu đồ tròn theo danh mục trong tháng đã chọn.
-5. Xem biểu đồ cột so sánh 12 tháng trong năm đã chọn.
-6. Sửa hoặc xóa khoản chi nhập sai; dữ liệu danh sách và thống kê được tải lại.
+   2. Thêm khoản chi gồm số tiền, danh mục, mô tả và ngày chi.
+   3. Chọn tháng để xem danh sách và tổng chi tiêu.
+   4. Xem biểu đồ tròn theo danh mục trong tháng đã chọn.
+   5. Xem biểu đồ cột so sánh 12 tháng trong năm đã chọn.
+   6. Sửa hoặc xóa khoản chi nhập sai; dữ liệu danh sách và thống kê được tải lại.
 
 ## 2. Hiện trạng dự án
 
@@ -39,21 +39,21 @@ Chi tiết các vị trí cần sửa nằm trong [REVIEW.md](C:/Users/84966/E-c
 ### Bắt buộc
 
 - Đăng ký/đăng nhập, xử lý token hết hạn.
-- Mỗi tài khoản chỉ thao tác với dữ liệu của mình.
-- Xem danh sách theo tháng, ngày mới nhất trước, có phân trang.
-- Thêm/sửa/xóa khoản chi thủ công.
-- Hiển thị tổng chi tháng và tổng chi năm đã chọn.
-- Biểu đồ tròn: tỷ trọng các danh mục trong tháng đã chọn.
-- Biểu đồ cột: tổng tiền từng tháng trong một năm.
-- Có trạng thái đang tải, không có dữ liệu, lỗi, xác thực hết hạn.
-- Giao diện sử dụng được trên desktop và điện thoại.
+  - Mỗi tài khoản chỉ thao tác với dữ liệu của mình.
+  - Xem danh sách theo tháng, ngày mới nhất trước, có phân trang.
+  - Thêm/sửa/xóa khoản chi thủ công.
+  - Hiển thị tổng chi tháng và tổng chi năm đã chọn.
+  - Biểu đồ tròn: tỷ trọng các danh mục trong tháng đã chọn.
+  - Biểu đồ cột: tổng tiền từng tháng trong một năm.
+  - Có trạng thái đang tải, không có dữ liệu, lỗi, xác thực hết hạn.
+  - Giao diện sử dụng được trên desktop và điện thoại.
 
 ### Sau MVP
 
 - Giọng nói, tự phân loại văn bản, tích hợp AI.
-- Ngân sách, thu nhập, nhắc nhở, xuất Excel/PDF.
-- Admin, nhiều loại tiền, kết nối ngân hàng, realtime.
-- Refresh token và quản lý nhiều phiên đăng nhập nếu phát sinh nhu cầu.
+  - Ngân sách, thu nhập, nhắc nhở, xuất Excel/PDF.
+  - Admin, nhiều loại tiền, kết nối ngân hàng, realtime.
+  - Refresh token và quản lý nhiều phiên đăng nhập nếu phát sinh nhu cầu.
 
 ## 4. Công nghệ đề xuất
 
@@ -89,14 +89,14 @@ Ví dụ danh sách chỉ tải 20 khoản chi/trang. Tổng tháng và các bi�
 ## 6. Quy tắc dữ liệu
 
 - MVP dùng VND. Amount giữ BigDecimal ở Java/PostgreSQL; không dùng double để tính tiền.
-- Thống nhất precision/scale của cột amount và giới hạn đầu vào trước khi triển khai; ví dụ numeric(19,2) và validation tối đa 2 chữ số thập phân. Đây là thay đổi đề xuất, chưa có trong entity hiện tại.
-- expenseDate là thời điểm chi thực tế. createdAt là thời điểm bản ghi được tạo. Báo cáo dùng expenseDate.
-- MVP giữ LocalDateTime hiện tại và quy ước toàn bộ ngày/giờ là giờ Việt Nam, Asia/Ho_Chi_Minh. JSON dùng yyyy-MM-dd'T'HH:mm:ss, không thêm Z. Đây chưa phải mô hình nhiều múi giờ.
-- Không gửi expenseDate khi tạo: dùng giờ hiện tại theo múi giờ đã quy ước. Khi cập nhật mà không gửi ngày: giữ ngày cũ.
-- Tháng được tính bằng khoảng [đầu tháng, đầu tháng kế tiếp): >= start và < end.
-- Thống nhất category trong request/response ở đợt hoàn thiện contract. Enum gửi qua API, nhãn tiếng Việt và màu ổn định đặt ở frontend.
-- Biểu đồ tròn lấy tổng theo danh mục trong một tháng. Biểu đồ cột lấy tổng từng tháng trong một năm. Hai biểu đồ trả lời hai câu hỏi khác nhau.
-- Tháng không có chi tiêu: tổng bằng 0. Khi tổng tháng bằng 0, không chia phần trăm và không tạo biểu đồ tròn giả.
+  - Thống nhất precision/scale của cột amount và giới hạn đầu vào trước khi triển khai; ví dụ numeric(19,2) và validation tối đa 2 chữ số thập phân. Đây là thay đổi đề xuất, chưa có trong entity hiện tại.
+  - expenseDate là thời điểm chi thực tế. createdAt là thời điểm bản ghi được tạo. Báo cáo dùng expenseDate.
+  - MVP giữ LocalDateTime hiện tại và quy ước toàn bộ ngày/giờ là giờ Việt Nam, Asia/Ho_Chi_Minh. JSON dùng yyyy-MM-dd'T'HH:mm:ss, không thêm Z. Đây chưa phải mô hình nhiều múi giờ.
+  - Không gửi expenseDate khi tạo: dùng giờ hiện tại theo múi giờ đã quy ước. Khi cập nhật mà không gửi ngày: giữ ngày cũ.
+  - Tháng được tính bằng khoảng [đầu tháng, đầu tháng kế tiếp): >= start và < end.
+  - Thống nhất category trong request/response ở đợt hoàn thiện contract. Enum gửi qua API, nhãn tiếng Việt và màu ổn định đặt ở frontend.
+  - Biểu đồ tròn lấy tổng theo danh mục trong một tháng. Biểu đồ cột lấy tổng từng tháng trong một năm. Hai biểu đồ trả lời hai câu hỏi khác nhau.
+  - Tháng không có chi tiêu: tổng bằng 0. Khi tổng tháng bằng 0, không chia phần trăm và không tạo biểu đồ tròn giả.
 
 ## 7. API hiện có và API cần bổ sung
 
@@ -218,18 +218,18 @@ Tham số phải được bind bởi repository; không nối SQL từ dữ li�
 ### Màn hình
 
 1. Login/register: form nhỏ, thông báo lỗi rõ, không cần dashboard nhiều trang.
-2. Dashboard: bộ chọn năm/tháng; tổng tháng và tổng năm; hai biểu đồ; danh sách chi tiêu; nút thêm khoản chi.
-3. Form thêm/sửa dạng dialog: số tiền, danh mục, mô tả, ngày chi. Xóa cần xác nhận để tránh bấm nhầm.
+   2. Dashboard: bộ chọn năm/tháng; tổng tháng và tổng năm; hai biểu đồ; danh sách chi tiêu; nút thêm khoản chi.
+   3. Form thêm/sửa dạng dialog: số tiền, danh mục, mô tả, ngày chi. Xóa cần xác nhận để tránh bấm nhầm.
 
 ### Thiết kế
 
 - Bề mặt trung tính, hỗ trợ sáng/tối; accent xanh tím, đường viền nhẹ.
-- Số tiền dùng tabular numbers; định dạng VND theo vi-VN.
-- Biểu đồ tròn dạng doughnut giúp đặt thông tin ở giữa; pie thường cũng dùng được.
-- Màu danh mục nhất quán giữa biểu đồ và chú giải. Biểu đồ cột dùng một màu chính, nổi bật tháng đang xem.
-- Desktop: hai biểu đồ cạnh nhau, bảng ở dưới. Mobile: xếp dọc, giữ số tiền/ngày đọc được.
-- Chọn tháng cập nhật danh sách, tổng tháng và doughnut. Chọn năm cập nhật dữ liệu 12 tháng. Cột là tổng cả tháng; không coi tháng chưa kết thúc là một tháng đầy đủ khi diễn giải.
-- Có trạng thái loading, empty, error và 401; tooltip VND; nhãn/danh sách thay thế để đọc được số liệu ngoài canvas.
+  - Số tiền dùng tabular numbers; định dạng VND theo vi-VN.
+  - Biểu đồ tròn dạng doughnut giúp đặt thông tin ở giữa; pie thường cũng dùng được.
+  - Màu danh mục nhất quán giữa biểu đồ và chú giải. Biểu đồ cột dùng một màu chính, nổi bật tháng đang xem.
+  - Desktop: hai biểu đồ cạnh nhau, bảng ở dưới. Mobile: xếp dọc, giữ số tiền/ngày đọc được.
+  - Chọn tháng cập nhật danh sách, tổng tháng và doughnut. Chọn năm cập nhật dữ liệu 12 tháng. Cột là tổng cả tháng; không coi tháng chưa kết thúc là một tháng đầy đủ khi diễn giải.
+  - Có trạng thái loading, empty, error và 401; tooltip VND; nhãn/danh sách thay thế để đọc được số liệu ngoài canvas.
 
 ### Cấu trúc file frontend đề xuất, chưa tạo
 
@@ -249,22 +249,22 @@ src/main/resources/static/
 ```
 
 - app.css: bố cục, màu, responsive.
-- api.js: fetch chung, Bearer header, xử lý HTTP lỗi.
-- auth.js: login/register và trạng thái đăng nhập.
-- dashboard.js: năm/tháng, loading, kết nối các phần.
-- charts.js: tạo và cập nhật hai Chart instances.
-- expenses.js: danh sách, form và thao tác dữ liệu.
+  - api.js: fetch chung, Bearer header, xử lý HTTP lỗi.
+  - auth.js: login/register và trạng thái đăng nhập.
+  - dashboard.js: năm/tháng, loading, kết nối các phần.
+  - charts.js: tạo và cập nhật hai Chart instances.
+  - expenses.js: danh sách, form và thao tác dữ liệu.
 
 Thư viện Chart.js cần ghim phiên bản đã chọn, giữ thông tin license khi vendoring. Các đường dẫn trên là cấu trúc đề xuất, không phải file hiện có.
 
 ### Xác thực frontend
 
 - HTML/CSS/JS tĩnh được truy cập để tải giao diện; API dữ liệu vẫn yêu cầu JWT và kiểm tra quyền. Đừng mở toàn bộ /api/** hoặc /** bằng permitAll().
-- MVP ban đầu có thể giữ JWT trong bộ nhớ JavaScript; reload thì đăng nhập lại. Đây là đánh đổi đơn giản để học, không phải cơ chế giữ phiên lâu dài.
-- Không cho rằng localStorage an toàn trước XSS. Nếu sau này dùng cookie HttpOnly để giữ phiên, phải thiết kế lại gửi token và bảo vệ CSRF tương ứng.
-- Đăng xuất ở client xóa token trong bộ nhớ, không thu hồi bản sao token còn hiệu lực ở nơi khác. MVP phải ghi nhận giới hạn này; muốn thu hồi ngay cần cơ chế phía server.
-- Cùng Spring Boot thì dùng URL tương đối và cùng origin. Nếu sau này tách dev server/frontend origin, cấu hình CORS và OPTIONS cụ thể.
-- Dữ liệu mô tả người dùng hiển thị bằng textContent hoặc render text an toàn, không chèn thẳng vào innerHTML.
+  - MVP ban đầu có thể giữ JWT trong bộ nhớ JavaScript; reload thì đăng nhập lại. Đây là đánh đổi đơn giản để học, không phải cơ chế giữ phiên lâu dài.
+  - Không cho rằng localStorage an toàn trước XSS. Nếu sau này dùng cookie HttpOnly để giữ phiên, phải thiết kế lại gửi token và bảo vệ CSRF tương ứng.
+  - Đăng xuất ở client xóa token trong bộ nhớ, không thu hồi bản sao token còn hiệu lực ở nơi khác. MVP phải ghi nhận giới hạn này; muốn thu hồi ngay cần cơ chế phía server.
+  - Cùng Spring Boot thì dùng URL tương đối và cùng origin. Nếu sau này tách dev server/frontend origin, cấu hình CORS và OPTIONS cụ thể.
+  - Dữ liệu mô tả người dùng hiển thị bằng textContent hoặc render text an toàn, không chèn thẳng vào innerHTML.
 
 ### Gắn dữ liệu API vào Chart.js
 
@@ -300,24 +300,24 @@ Thiết kế bố cục có thể xem trước ngay; phần kết nối frontend
 ## 11. Tiêu chí nghiệm thu MVP
 
 - A có thể thêm/sửa/xóa/xem khoản chi của A; A không thao tác với dữ liệu của B bằng cách đổi userId hoặc expenseId.
-- JWT sai, hết hạn, tài khoản bị xóa: không trả dữ liệu và không lỗi 500 ngoài ý muốn.
-- Trùng email, kể cả hai request đồng thời: không tạo hai tài khoản và có lỗi hợp lý.
-- Một khoản đúng 00:00 ngày đầu tháng sau chỉ thuộc tháng sau.
-- Báo cáo tháng/năm tính theo expenseDate, không theo createdAt.
-- Danh sách phân trang không làm tổng tháng bị tính thiếu.
-- Tổng categories bằng tổng tháng; tổng 12 tháng bằng tổng năm.
-- Không có chi tiêu: danh sách rỗng, tổng 0, biểu đồ tròn hiển thị empty state, không NaN/Infinity.
-- Sửa/xóa khoản chi cập nhật đúng dữ liệu và báo cáo sau khi tải lại.
-- Mô tả có ký tự HTML không được chạy như script trên frontend.
-- Giao diện không tràn ngang ở màn hình điện thoại, có nhãn và trạng thái lỗi rõ.
+  - JWT sai, hết hạn, tài khoản bị xóa: không trả dữ liệu và không lỗi 500 ngoài ý muốn.
+  - Trùng email, kể cả hai request đồng thời: không tạo hai tài khoản và có lỗi hợp lý.
+  - Một khoản đúng 00:00 ngày đầu tháng sau chỉ thuộc tháng sau.
+  - Báo cáo tháng/năm tính theo expenseDate, không theo createdAt.
+  - Danh sách phân trang không làm tổng tháng bị tính thiếu.
+  - Tổng categories bằng tổng tháng; tổng 12 tháng bằng tổng năm.
+  - Không có chi tiêu: danh sách rỗng, tổng 0, biểu đồ tròn hiển thị empty state, không NaN/Infinity.
+  - Sửa/xóa khoản chi cập nhật đúng dữ liệu và báo cáo sau khi tải lại.
+  - Mô tả có ký tự HTML không được chạy như script trên frontend.
+  - Giao diện không tràn ngang ở màn hình điện thoại, có nhãn và trạng thái lỗi rõ.
 
 Chưa chạy những kiểm thử này trong lần đọc code hiện tại. Bộ test đang có chưa đủ xác nhận các tiêu chí trên.
 
 ## 12. Tài liệu chính thức
 
 - [Chart.js: tổng quan và license MIT](https://www.chartjs.org/docs/latest/)
-- [Chart.js: doughnut và pie](https://www.chartjs.org/docs/latest/charts/doughnut.html)
-- [Chart.js: bar chart](https://www.chartjs.org/docs/latest/charts/bar.html)
-- [Chart.js: cập nhật dữ liệu](https://www.chartjs.org/docs/latest/developers/updates.html)
-- [Spring Data JPA: query methods](https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html)
-- [Spring Security: authentication architecture](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html)
+  - [Chart.js: doughnut và pie](https://www.chartjs.org/docs/latest/charts/doughnut.html)
+  - [Chart.js: bar chart](https://www.chartjs.org/docs/latest/charts/bar.html)
+  - [Chart.js: cập nhật dữ liệu](https://www.chartjs.org/docs/latest/developers/updates.html)
+  - [Spring Data JPA: query methods](https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html)
+  - [Spring Security: authentication architecture](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html)

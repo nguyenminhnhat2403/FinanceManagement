@@ -1,43 +1,40 @@
 package org.example.financemanagement.auth;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import java.util.UUID;
 
 public class RegisterRequest {
 
     @NotBlank
     private String name;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email is invalid")
+    @NotBlank @Email
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @NotBlank @Size(min = 6)
     private String password;
 
-    public String getEmail() {
-        return email;
-    }
+    // id cua otp
+    @NotNull
+    private UUID challengeId;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    // otp
+    @NotBlank @Pattern(regexp = "[0-9]{6}")
+    private String code;
 
-    public String getPassword() {
-        return password;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getName() {
-        return name;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public UUID getChallengeId() { return challengeId; }
+    public void setChallengeId(UUID challengeId) { this.challengeId = challengeId; }
+
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
 }
+

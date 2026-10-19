@@ -2,7 +2,9 @@ package org.example.financemanagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -12,18 +14,18 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY =
-            "my-super-secret-key-that-is-long-enough-123456";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     private final long EXPIRATION_TIME =
             1000 * 60 * 60; // 1 hour
 
     private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 
-        return Keys.hmacShaKeyFor(
-                SECRET_KEY.getBytes(StandardCharsets.UTF_8)
-        );
+        return Keys.hmacShaKeyFor(keyBytes);
     }
+
 
     public String generateToken(String email) {
 

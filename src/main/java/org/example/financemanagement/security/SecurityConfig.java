@@ -23,31 +23,56 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http
+    ) throws Exception {
+
         http
                 .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
                 )
 
                 .authorizeHttpRequests(auth -> auth
+
+                        // API đăng ký, đăng nhập
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/auth/register",
-                                "/api/auth/login"
+                                "/api/auth/login",
+                                "/api/auth/register-code",
+                                "/api/auth/forgot-password",
+                                "/api/auth/reset-password"
                         ).permitAll()
 
+                        // Giao diện frontend và static resources
                         .requestMatchers(
+                                HttpMethod.GET,
+                                "/login.html",
+                                "/register.html",
+                                "/dashboard.html",
                                 "/voice.html",
-                                "/error"
+                                "/assets/**",
+                                "/favicon.ico",
+                                "/forgot-password.html"
                         ).permitAll()
+
+                        // Error endpoint
+                        .requestMatchers("/error").permitAll()
+
+                        // Không cho lấy toàn bộ user
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/users"
                         ).denyAll()
+
+                        // API khác cần JWT
                         .anyRequest().authenticated()
                 )
+
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class

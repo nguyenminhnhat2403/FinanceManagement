@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tổng quan | FinanceManagement</title>
+
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+
+    <script defer
+            src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js">
+    </script>
+
+    <script defer src="/assets/js/dashboard.js"></script>
+</head>
+
+<body>
+<aside class="sidebar">
+    <a class="brand" href="/dashboard.html">
+        <span class="brand-logo">FM</span>
+        <span>FinanceManagement</span>
+    </a>
+
+    <nav class="navigation" aria-label="Điều hướng">
+        <a class="nav-item active" href="#overview">⌂ Tổng quan</a>
+        <a class="nav-item" href="#expenses">☷ Chi tiêu</a>
+        <a class="nav-item" href="#reports">▥ Báo cáo</a>
+
+        <button class="nav-item" disabled>◇ Danh mục · Sắp có</button>
+        <button class="nav-item" disabled>◎ Mục tiêu · Sắp có</button>
+        <button class="nav-item" disabled>⚙ Cài đặt · Sắp có</button>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="profile">
+            <span class="avatar" id="avatar">U</span>
+
+            <div class="profile-info">
+                <strong id="userName">Người dùng</strong>
+                <small id="userEmail"></small>
+            </div>
+        </div>
+
+        <button id="logoutButton" class="logout-button">
+            ↪ Đăng xuất
+        </button>
+    </div>
+</aside>
+
+<main class="main">
+    <header class="topbar">
+        <input
+                id="searchInput"
+                type="search"
+                aria-label="Tìm khoản chi trong tháng"
+                placeholder="Tìm nội dung, danh mục trong tháng..."
+        >
+
+        <span class="topbar-label">Tài chính cá nhân</span>
+    </header>
+
+    <div class="content" id="overview">
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">FINANCE MANAGEMENT</p>
+                <h1>Tổng quan chi tiêu</h1>
+                <p class="muted">Theo dõi từng khoản chi, chủ động mỗi ngày.</p>
+            </div>
+
+            <div class="toolbar">
+                <select id="monthSelect" aria-label="Tháng"></select>
+
+                <input
+                        id="yearInput"
+                        type="number"
+                        min="1"
+                        max="9999"
+                        aria-label="Năm"
+                >
+
+                <button id="voiceButton" class="button primary">
+                    🎙 Nhập giọng nói
+                </button>
+
+                <button id="manualButton" class="button">
+                    ＋ Nhập tay
+                </button>
+            </div>
+        </section>
+
+        <div class="status-row">
+            <p id="pageMessage" role="status" aria-live="polite"></p>
+            <button id="reloadButton" class="text-button">Tải lại</button>
+        </div>
+
+        <section class="stats-grid" aria-label="Tổng kết chi tiêu">
+            <article class="stat-card">
+                <span class="stat-icon red-icon">↗</span>
+                <div>
+                    <p id="currentLabel">Chi tiêu tháng chọn</p>
+                    <strong id="currentTotal" class="money-out">—</strong>
+                    <small id="periodNote">Theo tháng đã chọn</small>
+                </div>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-icon blue-icon">▣</span>
+                <div>
+                    <p id="previousLabel">Chi tiêu tháng trước</p>
+                    <strong id="previousTotal">—</strong>
+                    <small>Tổng cả tháng trước</small>
+                </div>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-icon green-icon">▥</span>
+                <div>
+                    <p>Chênh lệch so với tháng trước</p>
+                    <strong id="differenceTotal">—</strong>
+                    <small id="differenceNote">—</small>
+                </div>
+            </article>
+        </section>
+
+        <section class="charts-grid" id="reports">
+            <article class="panel">
+                <div class="panel-heading">
+                    <h2>Chi tiêu theo danh mục</h2>
+                    <span id="categoryPeriod" class="badge"></span>
+                </div>
+
+                <p id="categoryEmpty" class="muted" hidden>
+                    Chưa có khoản chi trong tháng này.
+                </p>
+
+                <div class="chart-box">
+                    <canvas
+                            id="categoryChart"
+                            role="img"
+                            aria-label="Biểu đồ tổng tiền theo danh mục">
+                    </canvas>
+                </div>
+
+                <div id="categoryLegend" class="category-legend"></div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <h2>Chi tiêu qua các tháng</h2>
+                    <span id="yearLabel" class="badge"></span>
+                </div>
+
+                <p class="muted chart-caption">Đơn vị: triệu đồng</p>
+
+                <div class="chart-box">
+                    <canvas
+                            id="monthlyChart"
+                            role="img"
+                            aria-label="Biểu đồ tổng chi 12 tháng">
+                    </canvas>
+                </div>
+
+                <p class="muted chart-caption">
+                    Cột xanh đậm là tháng đang chọn.
+                </p>
+            </article>
+        </section>
+
+        <p id="chartMessage" class="muted" role="status"></p>
+
+        <section class="panel" id="expenses">
+            <div class="panel-heading">
+                <h2>Danh sách chi tiêu</h2>
+
+                <div class="toolbar">
+                    <span>Danh mục:</span>
+
+                    <select
+                            id="categoryFilter"
+                            aria-label="Lọc danh sách theo danh mục">
+                        <option value="">Tất cả</option>
+                    </select>
+
+                    <span id="expenseCount" class="badge">—</span>
+                </div>
+            </div>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Ngày</th>
+                        <th>Nội dung</th>
+                        <th>Danh mục</th>
+                        <th class="align-right">Số tiền</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="expenseRows"></tbody>
+                </table>
+            </div>
+
+            <p id="listEmpty" class="empty-state" hidden>
+                Chưa có khoản chi phù hợp.
+            </p>
+        </section>
+    </div>
+</main>
+
+<!-- Cửa sổ nhập nằm bên phải, mở bằng JavaScript -->
+<dialog id="expenseDialog" class="expense-dialog">
+    <div class="drawer-heading">
+        <h2 id="formTitle">Thêm khoản chi</h2>
+
+        <button
+                id="closeDialog"
+                class="icon-button"
+                type="button"
+                aria-label="Đóng">
+            ✕
+        </button>
+    </div>
+
+    <section id="voiceSection" class="voice-section" hidden>
+        <div class="micro-circle">🎙</div>
+
+        <p id="voiceStatus">Sẵn sàng ghi âm</p>
+
+        <label for="transcriptInput">Nội dung nhận được</label>
+        <textarea id="transcriptInput" rows="3"></textarea>
+
+        <button id="recordButton" class="button" type="button">
+            Bắt đầu nói
+        </button>
+
+        <p class="muted">
+            Kiểm tra câu vừa nói, rồi điền số tiền và chọn danh mục bên dưới.
+        </p>
+    </section>
+
+    <form id="expenseForm">
+        <p class="muted">Kiểm tra thông tin trước khi lưu.</p>
+
+        <label for="amountInput">Số tiền (VND)</label>
+        <input
+                id="amountInput"
+                type="number"
+                min="1"
+                max="1000000000000"
+                step="1"
+                placeholder="Ví dụ: 50000"
+                required
+        >
+
+        <label for="categoryInput">Danh mục</label>
+        <select id="categoryInput" required></select>
+
+        <label for="descriptionInput">Nội dung</label>
+        <input
+                id="descriptionInput"
+                type="text"
+                placeholder="Ví dụ: Ăn trưa"
+                required
+        >
+
+        <div class="form-grid">
+            <div>
+                <label for="dateInput">Ngày chi tiêu</label>
+                <input id="dateInput" type="date" required>
+            </div>
+
+            <div>
+                <label for="timeInput">Thời gian</label>
+                <input id="timeInput" type="time" required>
+            </div>
+        </div>
+
+        <p id="formMessage" class="form-message" role="status"></p>
+
+        <button id="saveButton" class="button primary full-width" type="submit">
+            Lưu khoản chi
+        </button>
+
+        <button id="cancelButton" class="button full-width" type="button">
+            Hủy
+        </button>
+    </form>
+</dialog>
+</body>
+</html>

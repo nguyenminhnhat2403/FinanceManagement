@@ -1,10 +1,12 @@
 package org.example.financemanagement.expense;
 
+import jakarta.transaction.Transactional;
 import org.example.financemanagement.category.CategoryType;
 import org.example.financemanagement.common.exception.UserNotFoundException;
 import org.example.financemanagement.expense.dto.CreateExpenseRequest;
 import org.example.financemanagement.expense.dto.ExpenseDTOMapper;
 import org.example.financemanagement.expense.dto.ExpenseResponse;
+import org.example.financemanagement.expense.dto.UpdateExpenseRequest;
 import org.example.financemanagement.security.UserAccessService;
 import org.example.financemanagement.user.User;
 import org.example.financemanagement.user.UserRepository;
@@ -57,13 +59,12 @@ public class ExpenseService {
         return expenseDTOMapper.apply(savedExpense);
     }
 
-    public List<ExpenseResponse> getExpensesByMonth(
+    public List<ExpenseResponse> getExpenses(
             Long userId,
             int year,
-            int month
+            Integer month
     ) {
         userAccessService.checkOwner(userId);
-
         if (year < 1 || year > 9999) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -71,18 +72,25 @@ public class ExpenseService {
             );
         }
 
-        if (month < 1 || month > 12) {
+        if (month != null && (month < 1 || month > 12)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Tháng phải nằm trong khoảng từ 1 đến 12"
             );
         }
 
-        LocalDateTime start = LocalDateTime.of(
-                year, month, 1, 0, 0
-        );
+        LocalDateTime start;
+        LocalDateTime end;
+        // ko co month hoac co month
+        if (month == null) {
 
-        LocalDateTime end = start.plusMonths(1);
+            start = LocalDateTime.of(year, 1, 1, 0, 0);
+            end = start.plusYears(1);
+        } else {
+            // Có truyền tháng → lấy tháng được chọn
+            start = LocalDateTime.of(year, month, 1, 0, 0);
+            end = start.plusMonths(1);
+        }
 
         List<Expense> expenses =
                 expenseRepository.findExpensesInPeriod(
@@ -131,5 +139,47 @@ public class ExpenseService {
 //        }
 //        return total;
 //    }
+    @Transactional
+    public ExpenseResponse updateExpense(
+            Long userId,
+            Long expenseId,
+            UpdateExpenseRequest request
+    ) {
+        // Kiểm tra tài khoản đăng nhập có trùng userId trên URL không
+        userAccessService.checkOwner(userId);
 
+        // Chỉ tìm khoản chi thuộc user đó
+        Expense expense = expenseRepository
+                .findByIdAndUserId(expenseId, userId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Không tìm thấy khoản chi"
+                ));
+
+        expense.setCategory(request.getCategoryType());
+        expense.setAmount(request.getAmount());
+        expense.setDescription(request.getDescription().trim());
+        expense.setExpenseDate(request.getExpenseDate());
+
+        Expense savedExpense = expenseRepository.save(expense);
+
+        return expenseDTOMapper.apply(savedExpense);
+    }
+
+    @Transactional
+    public void deleteExpense(
+            Long userId,
+            Long expenseId
+    ) {
+        userAccessService.checkOwner(userId);
+
+        Expense expense = expenseRepository
+                .findByIdAndUserId(expenseId, userId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Không tìm thấy khoản chi"
+                ));
+
+        expenseRepository.delete(expense);
+    }
 }

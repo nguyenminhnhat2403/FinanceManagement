@@ -3,6 +3,8 @@ package org.example.financemanagement.expense;
 import jakarta.validation.Valid;
 import org.example.financemanagement.expense.dto.CreateExpenseRequest;
 import org.example.financemanagement.expense.dto.ExpenseResponse;
+import org.example.financemanagement.expense.dto.UpdateExpenseRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -27,18 +29,38 @@ public class ExpenseController {
     }
 
     @GetMapping("/{userId}/expenses")
-    public List<ExpenseResponse> getExpensesByMonth(
+    public List<ExpenseResponse> getExpenses(
             @PathVariable Long userId,
             @RequestParam int year,
-            @RequestParam int month
+            @RequestParam(required = false) Integer month
     ) {
-        return expenseService.getExpensesByMonth(
+        return expenseService.getExpenses(
                 userId,
                 year,
                 month
         );
     }
 
+    @PutMapping("/{userId}/expenses/{expenseId}")
+    public ExpenseResponse updateExpense(
+            @PathVariable Long userId,
+            @PathVariable Long expenseId,
+            @Valid @RequestBody UpdateExpenseRequest request
+    ) {
+        return expenseService.updateExpense(
+                userId,
+                expenseId,
+                request
+        );
+    }
 
+    @DeleteMapping("/{userId}/expenses/{expenseId}")
+    public ResponseEntity<Void> deleteExpense(
+            @PathVariable Long userId,
+            @PathVariable Long expenseId
+    ) {
+        expenseService.deleteExpense(userId, expenseId);
 
+        return ResponseEntity.noContent().build();
+    }
 }
