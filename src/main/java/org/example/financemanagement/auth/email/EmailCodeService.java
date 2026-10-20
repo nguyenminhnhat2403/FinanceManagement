@@ -31,7 +31,7 @@ public class EmailCodeService {
     private final PasswordEncoder passwordEncoder;
     private final SecureRandom random = new SecureRandom();
 
-    @Value("${spring.mail.username}")
+    @Value("${app.mail.from:${spring.mail.username}}")
     private String senderEmail;
 
     public String normalizeEmail(String email) {

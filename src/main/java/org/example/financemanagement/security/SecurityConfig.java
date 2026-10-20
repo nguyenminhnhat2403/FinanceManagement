@@ -68,6 +68,11 @@ public class SecurityConfig {
                                 HttpMethod.GET,
                                 "/api/users"
                         ).denyAll()
+                        // ngăn tạo user khi chưa qua tạo email
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/users"
+                        ).denyAll()
 
                         // API khác cần JWT
                         .anyRequest().authenticated()
